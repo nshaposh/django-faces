@@ -18,11 +18,15 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from images.views import *
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^login/$', auth_views.LoginView.as_view()),
     url(r'^$', home, name='home'),
     url(r'^upload', image_upload, name='image_upload'),
     url(r'^faces/$', image_with_faces, name='image_with_faces'),
+    url(r'^list/$', ImageListView.as_view(), name='image-list'),
+#    url('^', include('django.contrib.auth.urls')),
 #    url(r'^faces/(?P<num>[0-9]+)/$', image_with_faces, name='image_with_faces'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

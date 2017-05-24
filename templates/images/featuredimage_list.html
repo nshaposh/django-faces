@@ -1,0 +1,8 @@
+<h1>Images of {{request.user}}</h1>
+<ul>
+{% for image in object_list %}
+    <li><img width="200" height="150" src="{{ image.img.url }}" > - {{ image.name }}</li>
+{% empty %}
+    <li>No images yet.</li>
+{% endfor %}
+</ul>

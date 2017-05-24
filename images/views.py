@@ -4,6 +4,8 @@ from images.forms import ImageForm
 from django.conf import settings
 from tf.facesmodel import *
 from django.http import HttpResponse
+from django.views.generic.list import ListView
+from django.contrib.auth.decorators import login_required
 
 #import os
 
@@ -15,6 +17,7 @@ def home(request):
                               { 'image' : image})
 
 
+@login_required(login_url='/login/')
 def image_with_faces(request):
 
     image = FeaturedImage.objects.latest('uploaded') 
@@ -42,7 +45,7 @@ def image_with_faces(request):
 #                                })
     return HttpResponse(bok_plot)
 
-
+@login_required(login_url='/login/')
 def image_upload(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -55,3 +58,15 @@ def image_upload(request):
     return render(request, 'images/image_upload.html', {
         'form': form
     })
+
+
+#@login_required(login_url='/login/')
+class ImageListView(ListView):
+
+    model = FeaturedImage
+
+    def get_context_data(self, **kwargs):
+        context = super(ImageListView, self).get_context_data(**kwargs)
+#        context['now'] = timezone.now()
+        return context
+
