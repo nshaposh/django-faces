@@ -232,7 +232,7 @@ def img_faces_bok(im,logger):
 
     logger.info("Call to MS Cognitive Faces...")
     try:
-        faces = findfacesonimage(im)
+        faces = findfacesonimage(im,logger)
         logger.info("Done...")
     except Exception as e:
         logger.info(str(e))
