@@ -162,6 +162,8 @@ def findfacesonimage(im,logger):
     logger.info("Loading tensorflow model...")
     try:
         tf_model = my_family_faces(model_file='faces-aug.ftlearn')
+        logger.error("TF model loaded.")
+        
     except Exception as e:
 #        print("Result:",e.args,e,type(e))
         logger.error(str(e))
