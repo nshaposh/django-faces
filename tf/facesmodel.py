@@ -230,7 +230,7 @@ def img_faces_bok(im,logger):
     from bokeh.models import ColumnDataSource, Range1d, Label
 
 
-    logger.info("Call to MS Cognitive Faces...")
+    logger.info("Calling findfacesonimage...")
     try:
         faces = findfacesonimage(im,logger)
         logger.info("Done...")
