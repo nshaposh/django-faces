@@ -7,6 +7,19 @@ from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 
+
+import logging
+import sys
+logname = sys.argv[0]
+
+logger = logging.getLogger(logname)
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+logger.setLevel(logging.INFO)
+
+hdlr = logging.FileHandler('/var/tmp/' + logname + '.log')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr) 
+
 #import os
 
 def home(request):
@@ -32,10 +45,12 @@ def image_with_faces(request):
 #        face = res[1][0]['info']
 #        face_rect = face['faceRectangle']
         print(bok_plot)
+        logger.info("Bokeh plot successfully generated.")
 
     except Exception as e:
 
-        bok_plot = str(e);
+        bok_plot = "<html><body>{}</body></html>".format(str(e));
+        logger.error(str(e))
 #        pass
 
 
