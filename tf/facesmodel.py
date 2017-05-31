@@ -11,7 +11,7 @@ from tflearn.layers.normalization import local_response_normalization
 from tflearn.layers.estimator import regression
 from tflearn.data_augmentation import ImageAugmentation
 import numpy as np
-
+#from images.views import logger
 
 face_dict = {
     0:"Me",
@@ -205,7 +205,7 @@ def findfacesonimage(im):
 
 
 
-def img_faces_bok(im):
+def img_faces_bok(im,logger):
 
     from bokeh.models import ColumnDataSource, Range1d, Plot, LinearAxis, Grid
     from bokeh.models.glyphs import Image
@@ -215,7 +215,13 @@ def img_faces_bok(im):
     from bokeh.models import ColumnDataSource, Range1d, Label
 
 
-    faces = findfacesonimage(im)
+    logger.info("Call to MS Cognitive Faces...")
+    try:
+        faces = findfacesonimage(im)
+        logger.info("Done...")
+    except Exception as e:
+        logger.info(str(e))
+        
 #    im_info = faces[1][0]["info"]
     try:
         w = faces[1][0]["image_width"]
@@ -235,6 +241,7 @@ def img_faces_bok(im):
 #    fw = int(r["width"]*scale)
 #    fh = int(r["height"]*scale)
 
+    logger.info("Bokeh plotting")
     p = figure(plot_width = 1000, plot_height = int(1000*h/w), title="")
     p.toolbar.logo = None
     p.toolbar_location = None
@@ -273,6 +280,7 @@ def img_faces_bok(im):
 #    plot.image_url(im,x=0,y=1,w=1,h=1)
     html = file_html(p, CDN, "my plot")
 
+    logger.info("Faces Done!")
 #    faces = findfacesonimage(im)
     
     return html

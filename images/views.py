@@ -23,6 +23,7 @@ logger.addHandler(hdlr)
 #import os
 
 def home(request):
+    logger.info("home")
     image = FeaturedImage.objects.latest('uploaded') 
 #    print(settings.MEDIA_URL)
 #    res = findfacesonimage(image.img.url))
@@ -32,7 +33,7 @@ def home(request):
 
 @login_required(login_url='/login/')
 def image_with_faces(request):
-
+    logger.info("Faces!!!")
     image = FeaturedImage.objects.latest('uploaded') 
 #    print(settings.MEDIA_URL)
 #    res = findfacesonimage(image.img.url)
@@ -40,7 +41,8 @@ def image_with_faces(request):
     bok_plot = ''
     try:
         
-        bok_plot = img_faces_bok(image.img.url)
+        logger.info("Calling img_faces_bok")
+        bok_plot = img_faces_bok(image.img.url,logger)
 
 #        face = res[1][0]['info']
 #        face_rect = face['faceRectangle']
