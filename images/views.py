@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 import logging
 import sys
-logname = sys.argv[0]
+logname = 'django-faces'
 
 logger = logging.getLogger(logname)
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
