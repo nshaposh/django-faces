@@ -86,7 +86,7 @@ def get_exif_dict(exif):
     return dict
 
 
-def findfacesonimage(im):
+def findfacesonimage(im,logger):
 
     from PIL import Image
     import PIL
@@ -95,6 +95,7 @@ def findfacesonimage(im):
 
     import requests
     from io import BytesIO
+    logger.info("Call to MS Cognitive Faces...")
 
 
     KEY = 'c1fc932a6bc24ca3bbe97fe9b50aba7c'
@@ -115,7 +116,7 @@ def findfacesonimage(im):
 
     except Exception as e:
 
-
+        logger.error(str(e))
         return str(e),{}
 
 
@@ -131,6 +132,7 @@ def findfacesonimage(im):
         date = "3000:12:00 01:01:01"
 
     if width > basewidth:
+        logger.info("Resizing image {}...".format(im))
         wpercent = (basewidth/float(img.size[0]))
         hsize = int((float(img.size[1])*float(wpercent)))
         img_res = img.resize((basewidth,hsize), PIL.Image.ANTIALIAS)
@@ -142,6 +144,7 @@ def findfacesonimage(im):
         result = CF.face.detect(im,landmarks=True,attributes='age,gender,smile')
     except Exception as e:
 #        print("Result:",e.args,e,type(e))
+        logger.error(str(e))
         estr = str(e)
 #        result = {}
         
@@ -150,14 +153,24 @@ def findfacesonimage(im):
             return "rate_limit_exceeded",[]
 #        if e.code == return "rate_limit_exceeded"
 #    except:
+        logger.error(estr)
         return "error",{}
 
     images = []
     imw,imh = img.size
     
-    tf_model = my_family_faces(model_file='faces-aug.ftlearn')
+    logger.info("Loading tensorflow model...")
+    try:
+        tf_model = my_family_faces(model_file='faces-aug.ftlearn')
+    except Exception as e:
+#        print("Result:",e.args,e,type(e))
+        logger.error(str(e))
+#        estr = str(e)
+
 
     for datum in result:
+
+        logger.info("Cropping face images...")
 
         image = {"info":datum}
         image["image_width"] = imw
@@ -201,6 +214,8 @@ def findfacesonimage(im):
 #        face_cnt += 1
 #    img_cnt += 1  
 
+
+    logger.info("Done findfacesonimage...")
     return "success", images
 
 
@@ -280,7 +295,7 @@ def img_faces_bok(im,logger):
 #    plot.image_url(im,x=0,y=1,w=1,h=1)
     html = file_html(p, CDN, "my plot")
 
-    logger.info("Faces Done!")
+    logger.info("Faces Bokeh Done!")
 #    faces = findfacesonimage(im)
     
     return html
